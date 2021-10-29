@@ -21,8 +21,35 @@ namespace AnimalShelter.Controllers
 
     // GET api/dogs
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Dog>>> Get()
+    public async Task<ActionResult<IEnumerable<Dog>>> Get(string name, string breed, string gender, int age, int weight, string description)
     {
+      var query = _db.Dogs.AsQueryable();
+
+      if (name !=null)
+      {
+        query = query.Where(entry => entry.Name == name);
+      }
+
+      if (breed !=null)
+      {
+        query = query.Where(entry => entry.Breed == breed);
+      }
+
+      if (gender !=null)
+      {
+        query = query.Where(entry => entry.Gender == gender);
+      }
+
+      if (age !=0)
+      {
+        query = query.Where(entry => entry.Age == age);
+      }
+
+      if (weight !=0)
+      {
+        query = query.Where(entry => entry.Weight == weight);
+      }
+  
       return await _db.Dogs.ToListAsync();
     }
     // Post api/dogs
@@ -59,7 +86,7 @@ namespace AnimalShelter.Controllers
         }
         catch (DbUpdateConcurrencyException)
         {
-          if (!CatExists(id))
+          if (!DogExists(id))
           {
             return NotFound();
           }
@@ -83,7 +110,7 @@ namespace AnimalShelter.Controllers
       await _db.SaveChangesAsync();
       return NoContent();
     }
-    private bool CatExists(int id)
+    private bool DogExists(int id)
     {
       return _db.Dogs.Any(dog => dog.DogId == id);
     }
