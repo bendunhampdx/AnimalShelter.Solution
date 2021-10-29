@@ -33,5 +33,59 @@ namespace AnimalShelter.Controllers
       await _db.SaveChangesAsync();
       return CreatedAtAction("Post", new { id = dog.DogId }, dog);
     }
+
+    // GET api/dogs/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Dog>> GetDog(int id)
+    {
+      var dog = await _db.Dogs.FindAsync(id);
+      if (dog == null)
+      {
+        return NotFound();
+      }
+      return dog;
+    }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(int id, Dog dog)
+    {
+      if (id != dog.DogId)
+      {
+        return BadRequest();
+      }
+      _db.Entry(dog).State = EntityState.Modified;
+        try
+        {
+          await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+          if (!CatExists(id))
+          {
+            return NotFound();
+          }
+          else
+          {
+            throw;
+          }
+        }
+        return NoContent();
+    }
+    // DELETE api/dogs/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+      var dog = await _db.Dogs.FindAsync(id);
+      if (dog == null)
+      {
+        return NotFound();
+      }
+      _db.Dogs.Remove(dog);
+      await _db.SaveChangesAsync();
+      return NoContent();
+    }
+    private bool CatExists(int id)
+    {
+      return _db.Dogs.Any(dog => dog.DogId == id);
+    }
   }
 }
