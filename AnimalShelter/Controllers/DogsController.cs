@@ -21,7 +21,7 @@ namespace AnimalShelter.Controllers
 
     // GET api/dogs
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Dog>>> Get(string name, string breed, string gender, int age, int weight, string description)
+    public async Task<ActionResult<IEnumerable<Dog>>> Get(string name, string breed, string gender, int age, int weight)
     {
       var query = _db.Dogs.AsQueryable();
 
