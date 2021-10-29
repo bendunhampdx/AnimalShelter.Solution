@@ -28,9 +28,30 @@ namespace AnimalShelter
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AnimalShelter.Solution", Version = "v1" });
+                    c.SwaggerDoc("v1", new OpenApiInfo { 
+                        Title = "AnimalShelter", 
+                        Version = "v1",
+                        Description = "A simple Animal Shelter API",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Ben Dunham",
+                            Email = "bendunhampdx@gmail.com"
+                            Url = new Uri("https://www.linkedin.com/in/ben-dunham-dev/") 
+                        },
+                        License = new OpenApiLicense
+                        {
+                        Name = "Use under AFL",
+                        Url = new Uri("https://opensource.org/licenses/AFL-3.0"),
+                        }
+                    });
+                });
+            services.AddApiVersioning(o =>
+            {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 0);
             });
-        }
+    }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
